@@ -8,8 +8,9 @@ internal static class Program
     private static void Main(string[] args)
     {
         Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-        // Exercise01();
-        Exercise02();
+        //Exercise01();
+        //Exercise02();
+        Exercise03();
     }
 
     private static void Exercise01()
@@ -40,5 +41,32 @@ internal static class Program
         employee.IncreaseSalary(double.Parse(Console.ReadLine()!));
 
         Console.WriteLine($"\nFuncionário: {employee}");
+    }
+
+    private static void Exercise03()
+    {
+        Student student = new();
+
+        Console.Write("Nome do aluno: ");
+        student.Name = Console.ReadLine();
+
+        Console.WriteLine("Digite as três notas do aluno: ");
+        for (int i = 0; i < 3; i++)
+        {
+            student.AddGrade(double.Parse(Console.ReadLine()!));
+        }
+
+        double finalGrade = student.FinalGrade();
+        Console.WriteLine($"NOTA FINAL = {finalGrade:F2}");
+
+        if (finalGrade >= 60)
+        {
+            Console.WriteLine("APROVADO");
+        }
+        else
+        {
+            Console.WriteLine("REPROVADO");
+            Console.WriteLine($"FALTARAM {60 - finalGrade:F2} PONTOS");
+        }
     }
 }
