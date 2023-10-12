@@ -33,12 +33,29 @@ internal static class Program
 
         PrintSummary(order);
 
-        Console.Write("\nHow many items to this order? ");
-        int ordersNumber = int.Parse(Console.ReadLine()!);
-
-        for (int i = 1; i <= ordersNumber; i++)
+        while (order.Status.OrderStatus != Entities.Enums.OrderStatus.DELIVERED)
         {
-            Console.WriteLine($"\nEnter #{i} item data:");
+            AddingItems(order, orderService);
+            RemovingItems(order, orderService);
+
+            Console.WriteLine("\nTrying to change the status...");
+            Thread.Sleep(DELAY_TIME);
+            orderService.ChangeStatus();
+
+            PrintSummary(order);
+        }
+    }
+
+    private static void AddingItems(Order order, OrderService orderService)
+    {
+        int ordersNumber = 1;
+
+        Console.Write("\nDo you want to add an item to the cart (y / n) ? ");
+        string? chosenOption = Console.ReadLine();
+
+        while (!String.IsNullOrWhiteSpace(chosenOption) && chosenOption.Trim().ToLower().StartsWith('y'))
+        {
+            Console.WriteLine($"\nEnter #{ordersNumber} item data:");
 
             Console.Write("Product name: ");
             string productName = Console.ReadLine()!;
@@ -54,15 +71,42 @@ internal static class Program
             OrderItem orderItem = new(product, productQuantity);
 
             orderService.AddItem(orderItem);
-            PrintSummary(order);
-        }
 
-        for (int i = 1; i <= 3; i++)
-        {
-            Console.WriteLine("Trying to change the status...");
-            Thread.Sleep(DELAY_TIME);
-            orderService.ChangeStatus();
             PrintSummary(order);
+
+            ordersNumber++;
+
+            Console.Write("\nDo you want to continue adding an item to the cart (y / n) ? ");
+            chosenOption = Console.ReadLine();
+        }
+    }
+
+    private static void RemovingItems(Order order, OrderService orderService)
+    {
+        Console.Write("\nDo you want to remove an item from the cart (y / n) ? ");
+        string? chosenOption = Console.ReadLine();
+
+        while (!String.IsNullOrWhiteSpace(chosenOption) && chosenOption.Trim().ToLower().StartsWith('y'))
+        {
+            PrintSummary(order);
+
+            Console.Write("Chose item number: ");
+            int chosenItem = int.Parse(Console.ReadLine()!);
+
+            OrderItem? orderItem = order.Items.ElementAtOrDefault(chosenItem - 1);
+
+            if (orderItem != null)
+            {
+                orderService.RemoveItem(orderItem);
+                PrintSummary(order);
+            }
+            else
+            {
+                Console.WriteLine("Invalid item!");
+            }
+
+            Console.Write("\nDo you want to continue removing an item from the cart? (y / n) ? ");
+            chosenOption = Console.ReadLine();
         }
     }
 

@@ -39,7 +39,7 @@ namespace S09C132.Entities
 
                 foreach (OrderItem item in Items)
                 {
-                    sb.Append(" - ").AppendLine(item.ToString());
+                    sb.Append(" - Item #").Append(Items.IndexOf(item) + 1).Append(" - ").AppendLine(item.ToString());
                 }
 
                 sb

@@ -40,21 +40,16 @@ internal class OrderService
 
     public void RemoveItem(OrderItem item)
     {
-        if (_order.Items.Count == 0)
-        {
-            Console.WriteLine("The cart for this order is empty!");
-        }
-        else if (_order.Status.OrderStatus == OrderStatus.PENDING_PAYMENT)
+        if (_order.Status.OrderStatus == OrderStatus.PENDING_PAYMENT)
         {
             _order.Items.Remove(item);
-            ChangeStatusDate();
+            if (_order.Items.Count == 0) ResetStatus();
+            else ChangeStatusDate();
         }
         else
         {
             Console.WriteLine("It is no longer possible to remove items from this cart!");
         }
-
-        if (_order.Items.Count == 0) ResetStatus();
     }
 
     public void ChangeStatus()
