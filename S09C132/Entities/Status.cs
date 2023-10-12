@@ -13,12 +13,6 @@ internal class Status
         Date = date;
     }
 
-    public Status(Status otherStatus)
-    {
-        OrderStatus = otherStatus.OrderStatus;
-        Date = otherStatus.Date;
-    }
-
     public override string ToString()
     {
         return $"{OrderStatus} - {Date.ToString(Program.DATE_TIME_FORMAT)}";
