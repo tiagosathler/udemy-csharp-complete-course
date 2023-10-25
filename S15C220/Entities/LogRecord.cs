@@ -22,7 +22,7 @@ internal class LogRecord : IComparable
 
     public override sealed bool Equals(object? obj)
     {
-        return obj is LogRecord userAccess && userAccess.UserName?.Equals(UserName) == true;
+        return obj is LogRecord logRecord && logRecord.UserName?.Equals(UserName) == true;
     }
 
     public int CompareTo(object? obj)
