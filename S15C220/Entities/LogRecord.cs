@@ -56,38 +56,46 @@ internal class LogRecord : IComparable
         return !(left == right);
     }
 
+    private static bool IsNotItNull(LogRecord? left, LogRecord? right)
+    {
+        return left is not null
+            && right is not null
+            && left.UserName is not null
+            && right.UserName is not null;
+    }
+
     public static bool operator >(LogRecord? left, LogRecord? right)
     {
-        if (left is not null && right is not null)
+        if (IsNotItNull(left, right))
         {
-            return left.CompareTo(right) > 0;
+            return left!.CompareTo(right) > 0;
         }
         return false;
     }
 
     public static bool operator >=(LogRecord? left, LogRecord? right)
     {
-        if (left is not null && right is not null)
+        if (IsNotItNull(left, right))
         {
-            return left.CompareTo(right) >= 0;
+            return left!.CompareTo(right) >= 0;
         }
         return false;
     }
 
     public static bool operator <(LogRecord? left, LogRecord? right)
     {
-        if (left is not null && right is not null)
+        if (IsNotItNull(left, right))
         {
-            return left.CompareTo(right) < 0;
+            return left!.CompareTo(right) < 0;
         }
         return false;
     }
 
     public static bool operator <=(LogRecord? left, LogRecord? right)
     {
-        if (left is not null && right is not null)
+        if (IsNotItNull(left, right))
         {
-            return left.CompareTo(right) <= 0;
+            return left!.CompareTo(right) <= 0;
         }
         return false;
     }
