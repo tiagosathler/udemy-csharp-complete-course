@@ -32,7 +32,7 @@ internal class LogRecord : IComparable
             throw new ArgumentException("I can't compare different objects");
         }
         LogRecord other = (LogRecord)obj;
-        return UserName?.CompareTo(other.UserName) ?? 0;
+        return UserName?.CompareTo(other.UserName) ?? -1;
     }
 
     public override sealed string ToString()
