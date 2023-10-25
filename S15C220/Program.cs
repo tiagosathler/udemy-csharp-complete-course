@@ -18,6 +18,9 @@ internal static class Program
 
         LogRecord amanda = new("amanda", DateTime.Now);
         LogRecord ana = new("ana", DateTime.Now);
+        LogRecord nullName = new();
+
+        Console.WriteLine("\n\x1b[1mTESTES COM CONTAINS:\n\x1b[0m");
 
         TestContains(nameof(logRecordSet), logRecordSet, amanda);
         TestContains(nameof(logRecordSortedSet), logRecordSortedSet, amanda);
@@ -25,12 +28,22 @@ internal static class Program
         TestContains(nameof(logRecordSet), logRecordSet, ana);
         TestContains(nameof(logRecordSortedSet), logRecordSortedSet, ana);
 
-        TestOperators(amanda, amanda);
-        TestOperators(amanda, ana);
-        TestOperators(ana, amanda);
-        TestOperators(null, amanda);
-        TestOperators(amanda, null);
-        TestOperators(null, null);
+        TestContains(nameof(logRecordSet), logRecordSet, nullName);
+        TestContains(nameof(logRecordSortedSet), logRecordSortedSet, nullName);
+
+        TestContains(nameof(logRecordSet), logRecordSet, null);
+        TestContains(nameof(logRecordSortedSet), logRecordSortedSet, null);
+
+        Console.WriteLine("\n\x1b[1mTESTES COM OPERADORES:\n\x1b[0m");
+
+        TestOperators(amanda, amanda, "Testes entre o mesmo objeto:");
+        TestOperators(amanda, ana, "Testes entre objetos distintos");
+        TestOperators(ana, amanda, "Testes entre objetos distintos");
+        TestOperators(null, amanda, "Testes entre objetos nulo e não-nulo");
+        TestOperators(amanda, null, "Testes entre objetos não-nulo e nulo");
+        TestOperators(null, null, "Testes entre objetos nulos");
+        TestOperators(amanda, nullName, "Testes entre objetos distintos com nome e sem nome");
+        TestOperators(nullName, amanda, "Testes entre objetos distintos sem nome e com nome");
     }
 
     private static string[] GetInputData()
@@ -72,17 +85,19 @@ internal static class Program
         }
     }
 
-    private static void TestContains(string setName, ISet<LogRecord> set, LogRecord p1)
+    private static void TestContains(string setName, ISet<LogRecord> set, LogRecord? p)
     {
-        Console.WriteLine($"\nDoes '{setName}' contain '{p1.UserName}'? {set.Contains(p1)}");
+        string name = p is null ? "null" : (p.UserName ?? "null_name");
+
+        Console.WriteLine($"Does '{setName}' contain '{name}'? {set.Contains(p!)}");
     }
 
-    private static void TestOperators(LogRecord? p1, LogRecord? p2)
+    private static void TestOperators(LogRecord? p1, LogRecord? p2, string testName)
     {
-        string name1 = p1?.UserName ?? "null";
-        string name2 = p2?.UserName ?? "null";
+        string name1 = p1 is null ? "null" : (p1.UserName ?? "null_name");
+        string name2 = p2 is null ? "null" : (p2.UserName ?? "null_name");
 
-        Console.WriteLine();
+        Console.WriteLine($"{testName}");
 
         Console.WriteLine($"{name1} == {name2} = {p1 == p2}");
         Console.WriteLine($"{name1} != {name2} = {p1 != p2}");
